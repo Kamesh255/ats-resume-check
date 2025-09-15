@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ResumeUpload from "./components/ResumeUpload";
 import ScoreDisplay from "./components/ScoreDisplay";
 import Suggestions from "./components/Suggestions";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -16,7 +15,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-const REACT_APP_GEMINI_API_KEY = "AIzaSyD_qwgE79dfMn9trrFaJItZP5wHgGvjUt4";
+const REACT_APP_GEMINI_API_KEY = "AIzaSyD_qwgE79dfMn9trrFaJItZP5wHgGvjUt4"; // replace with .env in production
 const genAI = new GoogleGenerativeAI(REACT_APP_GEMINI_API_KEY);
 
 function App() {
@@ -70,7 +69,7 @@ function App() {
   // 📌 Analyze & Correct Resume using Gemini AI
   const handleAnalyze = async () => {
     if (!resumeText.trim()) {
-      alert("Please paste text or upload a file first.");
+      alert("Please upload a resume file first.");
       return;
     }
 
@@ -102,7 +101,7 @@ Resume: ${resumeText}`;
 
       setScore(parsed.score);
       setSuggestions(parsed.suggestions || []);
-      setCorrectedText(parsed.corrected_resume || resumeText); // Store corrected resume
+      setCorrectedText(parsed.corrected_resume || resumeText);
     } catch (error) {
       console.error("AI analyze error:", error);
       alert("AI could not analyze resume. Try again.");
@@ -131,10 +130,7 @@ Resume: ${resumeText}`;
     <div className="container py-5">
       <h1 className="text-center mb-4">ATS Resume Checker & Corrector (AI)</h1>
 
-      {/* Paste Text */}
-      <ResumeUpload text={resumeText} setText={setResumeText} />
-
-      {/* File Upload */}
+      {/* File Upload Only */}
       <div className="mb-3">
         <label className="form-label fw-bold">Upload Resume (PDF/DOCX)</label>
         <input
@@ -148,7 +144,7 @@ Resume: ${resumeText}`;
       <div className="mt-3 d-flex flex-wrap justify-content-center align-items-center gap-4">
         <button
           onClick={handleAnalyze}
-          className="btn btn-primary me-2 "
+          className="btn btn-primary me-2"
           disabled={loading || !resumeText.trim()}
         >
           {loading ? "Analyzing..." : "Analyze & Correct Resume"}
